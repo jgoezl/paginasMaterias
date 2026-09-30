@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mis Materias · Semestre 3</title>
+
+<style>
+    :root {
+        --bg:            #0f1117;
+        --bg-elev:       #161922;
+        --bg-elev-2:     #1d212c;
+        --bg-hover:      #232836;
+        --borde:         #272c3a;
+        --borde-suave:   #1f2430;
+        --texto:         #e6e8ee;
+        --texto-tenue:   #9aa2b4;
+        --texto-debil:   #6c7488;
+        --acento:        #6ea8fe;
+        --acento-suave:  #2b3a55;
+        --verde:         #4ade80;
+        --rojo:          #f87171;
+        --radio:         14px;
+        --sombra:        0 4px 20px rgba(0,0,0,.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+    }
+
+    body {
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--texto);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        padding: 0 16px 80px;
+        background-image:
+            radial-gradient(900px 400px at 15% -10%, rgba(110,168,254,.10), transparent 60%),
+            radial-gradient(700px 400px at 95% 0%, rgba(74,222,128,.06), transparent 60%);
+        background-attachment: fixed;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 820px;
+        margin: 0 auto;
+    }
+
+    /* ---------- Cabecera ---------- */
+
+    header {
+        padding: 42px 0 24px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -.5px;
+        margin: 0 0 6px;
+        color: var(--texto);
+    }
+
+    .subtitulo {
+        margin: 0;
+        color: var(--texto-debil);
+        font-size: 14px;
+    }
+
+    /* ---------- Barra de herramientas ---------- */
+
+    .barra {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 22px;
+    }
+
+    .buscador {
+        position: relative;
+        flex: 1 1 240px;
+    }
+
+    .buscador input {
+        width: 100%;
+        padding: 11px 14px 11px 38px;
+        background: var(--bg-elev);
+        border: 1px solid var(--borde);
+        border-radius: 10px;
+        color: var(--texto);
+        font-size: 14px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color .15s, background .15s;
+    }
+
+    .buscador input::placeholder { color: var(--texto-debil); }
+
+    .buscador input:focus {
+        border-color: var(--acento);
+        background: var(--bg-elev-2);
+    }
+
+    .buscador svg {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 15px;
+        height: 15px;
+        stroke: var(--texto-debil);
+        fill: none;
+        stroke-width: 2;
+        pointer-events: none;
+    }
+
+    button {
+        font-family: inherit;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: inherit;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 11px 16px;
+        border-radius: 10px;
+        background: var(--bg-elev);
+        border: 1px solid var(--borde);
+        color: var(--texto-tenue);
+        white-space: nowrap;
+        transition: .15s;
+    }
+
+    .btn:hover {
+        background: var(--bg-hover);
+        color: var(--texto);
+        border-color: #38405a;
+    }
+
+    .btn-principal {
+        background: var(--acento);
+        border-color: var(--acento);
+        color: #0b1220;
+        font-weight: 600;
+    }
+
+    .btn-principal:hover {
+        background: #8ab9ff;
+        border-color: #8ab9ff;
+        color: #0b1220;
+    }
+
+    /* ---------- Tarjeta de materia ---------- */
+
+    .materia {
+        background: var(--bg-elev);
+        border: 1px solid var(--borde-suave);
+        border-radius: var(--radio);
+        margin-bottom: 12px;
+        overflow: hidden;
+        transition: border-color .18s, transform .18s;
+    }
+
+    .materia:hover { border-color: var(--borde); }
+
+    .materia.abierta {
+        border-color: var(--acento-suave);
+        box-shadow: var(--sombra);
+    }
+
+    .cabecera {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 18px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .cabecera:hover { background: rgba(255,255,255,.02); }
+
+    .flecha {
+        flex: 0 0 auto;
+        width: 10px;
+        height: 10px;
+        border-right: 2px solid var(--texto-debil);
+        border-bottom: 2px solid var(--texto-debil);
+        transform: rotate(-45deg);
+        margin-left: 2px;
+        transition: transform .2s ease;
+    }
+
+    .materia.abierta .flecha {
+        transform: rotate(45deg);
+        border-color: var(--acento);
+    }
+
+    .titulo {
+        flex: 1 1 auto;
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--texto);
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .contador {
+        flex: 0 0 auto;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        color: var(--texto-debil);
+        background: var(--bg-elev-2);
+        border: 1px solid var(--borde);
+        border-radius: 999px;
+        padding: 2px 9px;
+    }
+
+    .acciones {
+        flex: 0 0 auto;
+        display: flex;
+        gap: 2px;
+        opacity: 0;
+        transition: opacity .15s;
+    }
+
+    .materia:hover .acciones,
+    .materia.abierta .acciones,
+    .acciones:focus-within { opacity: 1; }
+
+    .icono {
+        width: 30px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        color: var(--texto-debil);
+        font-size: 14px;
+        line-height: 1;
+        transition: .13s;
+    }
+
+    .icono:hover {
+        background: var(--bg-hover);
+        color: var(--texto);
+    }
+
+    .icono.peligro:hover {
+        background: rgba(248,113,113,.14);
+        color: var(--rojo);
+    }
+
+    /* ---------- Lista de enlaces ---------- */
+
+    .contenido {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows .22s ease;
+    }
+
+    .materia.abierta .contenido { grid-template-rows: 1fr; }
+
+    .contenido > div { overflow: hidden; }
+
+    .enlaces {
+        padding: 2px 14px 14px 40px;
+        border-top: 1px solid var(--borde-suave);
+        margin-top: -1px;
+    }
+
+    .fila {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 9px;
+        padding-right: 4px;
+        transition: background .13s;
+    }
+
+    .fila:hover { background: var(--bg-elev-2); }
+
+    .fila a {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 10px;
+        color: var(--texto-tenue);
+        text-decoration: none;
+        font-size: 14.5px;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .fila a:hover { color: var(--acento); }
+
+    .fila a::before {
+        content: "";
+        flex: 0 0 auto;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--texto-debil);
+        transition: background .13s;
+    }
+
+    .fila a:hover::before { background: var(--acento); }
+
+    .fila .acciones-enlace {
+        display: flex;
+        gap: 2px;
+        opacity: 0;
+        transition: opacity .13s;
+    }
+
+    .fila:hover .acciones-enlace,
+    .acciones-enlace:focus-within { opacity: 1; }
+
+    .vacio {
+        padding: 12px 10px;
+        color: var(--texto-debil);
+        font-size: 13.5px;
+        font-style: italic;
+    }
+
+    .agregar-enlace {
+        margin-top: 6px;
+        padding: 8px 10px;
+        border-radius: 9px;
+        color: var(--texto-debil);
+        font-size: 13.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        transition: .13s;
+    }
+
+    .agregar-enlace:hover {
+        background: var(--bg-elev-2);
+        color: var(--acento);
+    }
+
+    /* ---------- Estado vacío general ---------- */
+
+    .sin-materias {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--texto-debil);
+        border: 1px dashed var(--borde);
+        border-radius: var(--radio);
+    }
+
+    /* ---------- Pie ---------- */
+
+    footer {
+        margin-top: 34px;
+        padding-top: 18px;
+        border-top: 1px solid var(--borde-suave);
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-tenue {
+        padding: 8px 12px;
+        border-radius: 8px;
+        color: var(--texto-debil);
+        font-size: 13px;
+        transition: .13s;
+    }
+
+    .btn-tenue:hover { background: var(--bg-elev); color: var(--texto-tenue); }
+
+    .aviso-guardado {
+        position: fixed;
+        left: 50%;
+        bottom: 26px;
+        transform: translate(-50%, 20px);
+        background: var(--bg-elev-2);
+        border: 1px solid var(--borde);
+        color: var(--texto);
+        padding: 11px 18px;
+        border-radius: 10px;
+        font-size: 13.5px;
+        box-shadow: var(--sombra);
+        opacity: 0;
+        pointer-events: none;
+        transition: .25s ease;
+        z-index: 60;
+    }
+
+    .aviso-guardado.visible {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    /* ---------- Modal ---------- */
+
+    .fondo-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(6,8,12,.72);
+        backdrop-filter: blur(3px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 50;
+    }
+
+    .fondo-modal.visible { display: flex; }
+
+    .modal {
+        width: 100%;
+        max-width: 440px;
+        background: var(--bg-elev);
+        border: 1px solid var(--borde);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.55);
+        animation: aparecer .16s ease;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: translateY(8px) scale(.98); }
+        to   { opacity: 1; transform: none; }
+    }
+
+    .modal h2 {
+        margin: 0 0 4px;
+        font-size: 19px;
+        font-weight: 600;
+    }
+
+    .modal p.ayuda {
+        margin: 0 0 18px;
+        font-size: 13.5px;
+        color: var(--texto-debil);
+    }
+
+    .campo { margin-bottom: 14px; }
+
+    .campo label {
+        display: block;
+        font-size: 12.5px;
+        color: var(--texto-tenue);
+        margin-bottom: 6px;
+        letter-spacing: .2px;
+    }
+
+    .campo input {
+        width: 100%;
+        padding: 11px 13px;
+        background: var(--bg);
+        border: 1px solid var(--borde);
+        border-radius: 9px;
+        color: var(--texto);
+        font-size: 14px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color .15s;
+    }
+
+    .campo input:focus { border-color: var(--acento); }
+
+    .error {
+        color: var(--rojo);
+        font-size: 13px;
+        min-height: 18px;
+        margin: -6px 0 10px;
+    }
+
+    .botones-modal {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 560px) {
+        header { padding: 30px 0 18px; }
+        h1 { font-size: 26px; }
+        .enlaces { padding-left: 22px; }
+        .acciones, .acciones-enlace { opacity: 1; }
+        .contador { display: none; }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <header>
+        <h1>Mis Materias</h1>
+        <p class="subtitulo">Semestre 3 · Universidad Nacional de Colombia</p>
+    </header>
+
+    <div class="barra">
+        <div class="buscador">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>
+            <input id="buscar" type="search" placeholder="Buscar materia o enlace..." autocomplete="off">
+        </div>
+        <button class="btn btn-principal" id="btn-nueva-materia">+ Nueva materia</button>
+    </div>
+
+    <main id="lista"><section class="materia abierta" data-materia="msscimzrdlqver"><div class="cabecera" data-accion="alternar" data-materia="msscimzrdlqver"><span class="flecha"></span><span class="titulo">Fundamentos de Matemáticas Discretas</span><span class="contador">5</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscimzrdlqver">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscimzrdlqver">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscimzrdlqver">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscimzrdlqver">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscimzrdlqver">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://faculty.ksu.edu.sa/sites/default/files/%5BBook%5D%20Discrete%20mathematics%20and%20its%20applications%20%282019%29_0.pdf" target="_blank" rel="noopener noreferrer" title="https://faculty.ksu.edu.sa/sites/default/files/%5BBook%5D%20Discrete%20mathematics%20and%20its%20applications%20%282019%29_0.pdf">Discrete Mathematics and its Applications — Rosen</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrdlqver" data-enlace="msscimzre9c0af">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrdlqver" data-enlace="msscimzre9c0af">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrdlqver" data-enlace="msscimzre9c0af">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrdlqver" data-enlace="msscimzre9c0af">✕</button></div></div><div class="fila"><a href="https://www.youtube.com/playlist?list=PLmejcmoRNsMiUoQakdJMTELnDMOS-Cqh5" target="_blank" rel="noopener noreferrer" title="https://www.youtube.com/playlist?list=PLmejcmoRNsMiUoQakdJMTELnDMOS-Cqh5">Videos de clases de Cabarcas</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrdlqver" data-enlace="msscimzrc41jyx">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrdlqver" data-enlace="msscimzrc41jyx">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrdlqver" data-enlace="msscimzrc41jyx">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrdlqver" data-enlace="msscimzrc41jyx">✕</button></div></div><div class="fila"><a href="https://drive.google.com/drive/u/1/folders/1-n5bXLQsaGgl1_y-you4-cf8g_VEYmvr" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/u/1/folders/1-n5bXLQsaGgl1_y-you4-cf8g_VEYmvr">Drive 1</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrdlqver" data-enlace="msscxeqshj5pqh">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrdlqver" data-enlace="msscxeqshj5pqh">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrdlqver" data-enlace="msscxeqshj5pqh">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrdlqver" data-enlace="msscxeqshj5pqh">✕</button></div></div><div class="fila"><a href="https://sites.google.com/view/blog-areacurricularmates/herramientas/directorio-de-asignaturas/fundamentos-de-matem%C3%A1ticas-discretas" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/view/blog-areacurricularmates/herramientas/directorio-de-asignaturas/fundamentos-de-matem%C3%A1ticas-discretas">Sites</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrdlqver" data-enlace="mssczrpdlkoppq">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrdlqver" data-enlace="mssczrpdlkoppq">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrdlqver" data-enlace="mssczrpdlkoppq">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrdlqver" data-enlace="mssczrpdlkoppq">✕</button></div></div><div class="fila"><a href="https://bibliotecadigital.uce.edu.ec/files/original/fb4a8067eaa05f1342eee9eadbc5766238fc4b84.pdf" target="_blank" rel="noopener noreferrer" title="https://bibliotecadigital.uce.edu.ec/files/original/fb4a8067eaa05f1342eee9eadbc5766238fc4b84.pdf">Libro Matematicas discretas Johnsonbaugh</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrdlqver" data-enlace="mtj6wk7wzkf7i3">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrdlqver" data-enlace="mtj6wk7wzkf7i3">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrdlqver" data-enlace="mtj6wk7wzkf7i3">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrdlqver" data-enlace="mtj6wk7wzkf7i3">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscimzrdlqver">+ Agregar enlace</button></div></div></div></section><section class="materia" data-materia="msscimzr17f356"><div class="cabecera" data-accion="alternar" data-materia="msscimzr17f356"><span class="flecha"></span><span class="titulo">Ecuaciones Diferenciales</span><span class="contador">8</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscimzr17f356">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscimzr17f356">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscimzr17f356">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscimzr17f356">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscimzr17f356">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://8b7a35dc-d2a9-4a61-ae5b-0520aae0300a.filesusr.com/ugd/fa8c40_d6c4c976d24d4d13950db034e4927d44.pdf?index=true" target="_blank" rel="noopener noreferrer" title="https://8b7a35dc-d2a9-4a61-ae5b-0520aae0300a.filesusr.com/ugd/fa8c40_d6c4c976d24d4d13950db034e4927d44.pdf?index=true">Libro guía</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr17f356" data-enlace="msscimzrstnu13">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzrstnu13">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzrstnu13">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzrstnu13">✕</button></div></div><div class="fila"><a href="https://www.youtube.com/@almaarmijoaverill1429/playlists" target="_blank" rel="noopener noreferrer" title="https://www.youtube.com/@almaarmijoaverill1429/playlists">Videos</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr17f356" data-enlace="msscimzreneanc">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzreneanc">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzreneanc">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzreneanc">✕</button></div></div><div class="fila"><a href="https://www.youtube.com/watch?v=SYAwqnWfIsA&amp;list=PLQtxEdIiM6gI4kj3koyvg2NGdxcI-2O59" target="_blank" rel="noopener noreferrer" title="https://www.youtube.com/watch?v=SYAwqnWfIsA&amp;list=PLQtxEdIiM6gI4kj3koyvg2NGdxcI-2O59">Videos profe Julio Morales</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr17f356" data-enlace="msscimzrupbvc8">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzrupbvc8">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzrupbvc8">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzrupbvc8">✕</button></div></div><div class="fila"><a href="https://sites.google.com/unal.edu.co/cursoecuacionesdiferenciales/p%C3%A1gina-principal?authuser=0" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/unal.edu.co/cursoecuacionesdiferenciales/p%C3%A1gina-principal?authuser=0">Curso en Sites</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr17f356" data-enlace="msscimzr4bkt81">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzr4bkt81">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzr4bkt81">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzr4bkt81">✕</button></div></div><div class="fila"><a href="https://drive.google.com/drive/folders/1YYBzQC2BJ0vn_xj7Yu3nZo4gUekhOX9_" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/folders/1YYBzQC2BJ0vn_xj7Yu3nZo4gUekhOX9_">Parciales viejos</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr17f356" data-enlace="msscimzr1etped">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzr1etped">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzr1etped">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr17f356" data-enlace="msscimzr1etped">✕</button></div></div><div class="fila"><a href="https://drive.google.com/drive/folders/1NGark_HhNunmOUZyAFrdZgDgggF118TY" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/folders/1NGark_HhNunmOUZyAFrdZgDgggF118TY">Drive EDD</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr17f356" data-enlace="mtf45ywr52s24g">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr17f356" data-enlace="mtf45ywr52s24g">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr17f356" data-enlace="mtf45ywr52s24g">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr17f356" data-enlace="mtf45ywr52s24g">✕</button></div></div><div class="fila"><a href="https://eliecartan.github.io/pagina-academica/cursos/ecuaciones-diferenciales.html" target="_blank" rel="noopener noreferrer" title="https://eliecartan.github.io/pagina-academica/cursos/ecuaciones-diferenciales.html">Pagina Alejandro Arenas</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr17f356" data-enlace="mtf46tjvx4eml3">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr17f356" data-enlace="mtf46tjvx4eml3">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr17f356" data-enlace="mtf46tjvx4eml3">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr17f356" data-enlace="mtf46tjvx4eml3">✕</button></div></div><div class="fila"><a href="https://unvirtual.medellin.unal.edu.co/course/view.php?id=1241" target="_blank" rel="noopener noreferrer" title="https://unvirtual.medellin.unal.edu.co/course/view.php?id=1241">Unvirtual</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr17f356" data-enlace="mu7kg0jmuinc65">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr17f356" data-enlace="mu7kg0jmuinc65">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr17f356" data-enlace="mu7kg0jmuinc65">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr17f356" data-enlace="mu7kg0jmuinc65">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscimzr17f356">+ Agregar enlace</button></div></div></div></section><section class="materia abierta" data-materia="msscimzr6sk7xe"><div class="cabecera" data-accion="alternar" data-materia="msscimzr6sk7xe"><span class="flecha"></span><span class="titulo">Probabilidad</span><span class="contador">5</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscimzr6sk7xe">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscimzr6sk7xe">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscimzr6sk7xe">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscimzr6sk7xe">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscimzr6sk7xe">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://unvirtual.medellin.unal.edu.co/course/view.php?id=2095&amp;section=0#tabs-tree-start" target="_blank" rel="noopener noreferrer" title="https://unvirtual.medellin.unal.edu.co/course/view.php?id=2095&amp;section=0#tabs-tree-start">Moodle - Probabilidad</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtj2kvck2oe3b1">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtj2kvck2oe3b1">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtj2kvck2oe3b1">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtj2kvck2oe3b1">✕</button></div></div><div class="fila"><a href="https://drive.google.com/drive/u/1/folders/14snxxPU-4sC1lECQOuklNUq9Wf4LjSbM" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/u/1/folders/14snxxPU-4sC1lECQOuklNUq9Wf4LjSbM">Libros</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4dyaw15qls8">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4dyaw15qls8">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4dyaw15qls8">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4dyaw15qls8">✕</button></div></div><div class="fila"><a href="https://drive.google.com/drive/u/1/folders/1D9Lns5z6I8t42oJ7xuI0U0pUpKpZNRbj" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/u/1/folders/1D9Lns5z6I8t42oJ7xuI0U0pUpKpZNRbj">Drive materia</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4eh9d1vt82y">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4eh9d1vt82y">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4eh9d1vt82y">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4eh9d1vt82y">✕</button></div></div><div class="fila"><a href="https://drive.google.com/drive/u/1/folders/1e2YyKycdLx_o9uceooau0JujO89L4G_z" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/u/1/folders/1e2YyKycdLx_o9uceooau0JujO89L4G_z">Tecnicas de conteo</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4nse25i98g2">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4nse25i98g2">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4nse25i98g2">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtf4nse25i98g2">✕</button></div></div><div class="fila"><a href="https://drive.google.com/drive/u/1/folders/1ePo3K2nsMub_TkkfaDfpZXBjk6igBp_a" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/u/1/folders/1ePo3K2nsMub_TkkfaDfpZXBjk6igBp_a">Grabaciones de clases virtuales</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtj2ys4u2y1x0w">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtj2ys4u2y1x0w">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtj2ys4u2y1x0w">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr6sk7xe" data-enlace="mtj2ys4u2y1x0w">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscimzr6sk7xe">+ Agregar enlace</button></div></div></div></section><section class="materia abierta" data-materia="msscn9d40p8xuz"><div class="cabecera" data-accion="alternar" data-materia="msscn9d40p8xuz"><span class="flecha"></span><span class="titulo">Matemáticas Discretas</span><span class="contador">2</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscn9d40p8xuz">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscn9d40p8xuz">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscn9d40p8xuz">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscn9d40p8xuz">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscn9d40p8xuz">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://faculty.ksu.edu.sa/sites/default/files/%5BBook%5D%20Discrete%20mathematics%20and%20its%20applications%20%282019%29_0.pdf" target="_blank" rel="noopener noreferrer" title="https://faculty.ksu.edu.sa/sites/default/files/%5BBook%5D%20Discrete%20mathematics%20and%20its%20applications%20%282019%29_0.pdf">Libro Rosen</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscn9d40p8xuz" data-enlace="msscof4l21y7ec">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscn9d40p8xuz" data-enlace="msscof4l21y7ec">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscn9d40p8xuz" data-enlace="msscof4l21y7ec">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscn9d40p8xuz" data-enlace="msscof4l21y7ec">✕</button></div></div><div class="fila"><a href="https://sites.google.com/a/unal.edu.co/camilo-arias-abad/md-2026-ii" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/a/unal.edu.co/camilo-arias-abad/md-2026-ii">Pagina del curso 2026-02</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscn9d40p8xuz" data-enlace="msscp5sq4xugvy">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscn9d40p8xuz" data-enlace="msscp5sq4xugvy">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscn9d40p8xuz" data-enlace="msscp5sq4xugvy">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscn9d40p8xuz" data-enlace="msscp5sq4xugvy">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscn9d40p8xuz">+ Agregar enlace</button></div></div></div></section><section class="materia" data-materia="msscvt9f0nqdp9"><div class="cabecera" data-accion="alternar" data-materia="msscvt9f0nqdp9"><span class="flecha"></span><span class="titulo">Algebra Multilineal y formas Canónicas</span><span class="contador">1</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscvt9f0nqdp9">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscvt9f0nqdp9">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscvt9f0nqdp9">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscvt9f0nqdp9">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscvt9f0nqdp9">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://drive.google.com/drive/u/1/folders/1-2u6Qxao-OiV_A4EZinpswg_8Fej1VXK" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/u/1/folders/1-2u6Qxao-OiV_A4EZinpswg_8Fej1VXK">Drive 1</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscvt9f0nqdp9" data-enlace="msscw361g7zre9">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscvt9f0nqdp9" data-enlace="msscw361g7zre9">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscvt9f0nqdp9" data-enlace="msscw361g7zre9">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscvt9f0nqdp9" data-enlace="msscw361g7zre9">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscvt9f0nqdp9">+ Agregar enlace</button></div></div></div></section><section class="materia" data-materia="msscimzrmgger8"><div class="cabecera" data-accion="alternar" data-materia="msscimzrmgger8"><span class="flecha"></span><span class="titulo">Fundamentos de Análisis</span><span class="contador">3</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscimzrmgger8">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscimzrmgger8">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscimzrmgger8">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscimzrmgger8">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscimzrmgger8">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://www.youtube.com/playlist?list=PLmejcmoRNsMh4EjgW0gOxFe5Q8eUMO-in" target="_blank" rel="noopener noreferrer" title="https://www.youtube.com/playlist?list=PLmejcmoRNsMh4EjgW0gOxFe5Q8eUMO-in">Clases Sigifredo</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrmgger8" data-enlace="msscimzrbdbkzu">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrmgger8" data-enlace="msscimzrbdbkzu">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrmgger8" data-enlace="msscimzrbdbkzu">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrmgger8" data-enlace="msscimzrbdbkzu">✕</button></div></div><div class="fila"><a href="https://drive.google.com/drive/u/1/folders/138VlDSo1e4aVDJgJwICfkGTzc-r1xAW9" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/u/1/folders/138VlDSo1e4aVDJgJwICfkGTzc-r1xAW9">Drive 1</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrmgger8" data-enlace="msscr0xma4k65g">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrmgger8" data-enlace="msscr0xma4k65g">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrmgger8" data-enlace="msscr0xma4k65g">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrmgger8" data-enlace="msscr0xma4k65g">✕</button></div></div><div class="fila"><a href="https://sites.google.com/view/blog-areacurricularmates/herramientas/directorio-de-asignaturas/fundamentos-de-an%C3%A1lisis" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/view/blog-areacurricularmates/herramientas/directorio-de-asignaturas/fundamentos-de-an%C3%A1lisis">Sites</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrmgger8" data-enlace="msscz9z4bfucp6">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrmgger8" data-enlace="msscz9z4bfucp6">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrmgger8" data-enlace="msscz9z4bfucp6">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrmgger8" data-enlace="msscz9z4bfucp6">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscimzrmgger8">+ Agregar enlace</button></div></div></div></section><section class="materia" data-materia="msscimzr4h8eff"><div class="cabecera" data-accion="alternar" data-materia="msscimzr4h8eff"><span class="flecha"></span><span class="titulo">Álgebra Lineal</span><span class="contador">5</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscimzr4h8eff">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscimzr4h8eff">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscimzr4h8eff">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscimzr4h8eff">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscimzr4h8eff">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://sites.google.com/unal.edu.co/linealunalmedenfocada/inicio" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/unal.edu.co/linealunalmedenfocada/inicio">Página del curso (Grupo 1)</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrxrck6k">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrxrck6k">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrxrck6k">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrxrck6k">✕</button></div></div><div class="fila"><a href="https://ciencias.medellin.unal.edu.co/cursos/algebra-lineal/" target="_blank" rel="noopener noreferrer" title="https://ciencias.medellin.unal.edu.co/cursos/algebra-lineal/">Página del curso</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrkegs78">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrkegs78">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrkegs78">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrkegs78">✕</button></div></div><div class="fila"><a href="https://drive.google.com/file/d/1t6heuHQH2GM49Yj7ugCJ7qmNhMVVTd9x/view" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/file/d/1t6heuHQH2GM49Yj7ugCJ7qmNhMVVTd9x/view">Libro guía (Español)</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzr98r6f1">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzr98r6f1">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzr98r6f1">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzr98r6f1">✕</button></div></div><div class="fila"><a href="https://anandinstitute.org/pdf/lenearal.pdf" target="_blank" rel="noopener noreferrer" title="https://anandinstitute.org/pdf/lenearal.pdf">Libro guía (Inglés)</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzr4dlgka">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzr4dlgka">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzr4dlgka">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzr4dlgka">✕</button></div></div><div class="fila"><a href="https://drive.google.com/file/d/1A0vsgWDkxSAd0flLbgKQHadb6x3HvAXA/view" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/file/d/1A0vsgWDkxSAd0flLbgKQHadb6x3HvAXA/view">Programa del curso</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrii32e3">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrii32e3">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrii32e3">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzr4h8eff" data-enlace="msscimzrii32e3">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscimzr4h8eff">+ Agregar enlace</button></div></div></div></section><section class="materia abierta" data-materia="msscimzro3hx7s"><div class="cabecera" data-accion="alternar" data-materia="msscimzro3hx7s"><span class="flecha"></span><span class="titulo">Cálculo en Varias Variables</span><span class="contador">5</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscimzro3hx7s">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscimzro3hx7s">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscimzro3hx7s">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscimzro3hx7s">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscimzro3hx7s">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://unvirtual.medellin.unal.edu.co/course/view.php?id=157" target="_blank" rel="noopener noreferrer" title="https://unvirtual.medellin.unal.edu.co/course/view.php?id=157">UN VIRTUAL</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrwspggo">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrwspggo">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrwspggo">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrwspggo">✕</button></div></div><div class="fila"><a href="https://sites.google.com/unal.edu.co/gea-unal-sede-medellin/tutorias-y-talleres-gea" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/unal.edu.co/gea-unal-sede-medellin/tutorias-y-talleres-gea">GEA</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzre47pvg">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzre47pvg">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzre47pvg">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzre47pvg">✕</button></div></div><div class="fila"><a href="https://intranetua.uantof.cl/estudiomat/calculo3/stewart.pdf" target="_blank" rel="noopener noreferrer" title="https://intranetua.uantof.cl/estudiomat/calculo3/stewart.pdf">Libro guía</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrqtph04">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrqtph04">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrqtph04">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrqtph04">✕</button></div></div><div class="fila"><a href="https://www.youtube.com/@calculoenvariasvariables-u9915/courses" target="_blank" rel="noopener noreferrer" title="https://www.youtube.com/@calculoenvariasvariables-u9915/courses">Videos de YouTube</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrclc1xe">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrclc1xe">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrclc1xe">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrclc1xe">✕</button></div></div><div class="fila"><a href="https://unvirtual.medellin.unal.edu.co/pluginfile.php/319047/mod_resource/content/78/%5B2026.01%20-%20CVV%5D%20Programa-calendario.pdf" target="_blank" rel="noopener noreferrer" title="https://unvirtual.medellin.unal.edu.co/pluginfile.php/319047/mod_resource/content/78/%5B2026.01%20-%20CVV%5D%20Programa-calendario.pdf">Programa calendario</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrm105bk">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrm105bk">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrm105bk">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzro3hx7s" data-enlace="msscimzrm105bk">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscimzro3hx7s">+ Agregar enlace</button></div></div></div></section><section class="materia abierta" data-materia="msscimzrqzod7t"><div class="cabecera" data-accion="alternar" data-materia="msscimzrqzod7t"><span class="flecha"></span><span class="titulo">POO</span><span class="contador">4</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscimzrqzod7t">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscimzrqzod7t">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscimzrqzod7t">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscimzrqzod7t">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscimzrqzod7t">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://drive.google.com/drive/folders/11tjYtSdUduVrHQI1cAlMgfFE5wav2jd-?usp=drive_link" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/folders/11tjYtSdUduVrHQI1cAlMgfFE5wav2jd-?usp=drive_link">Drive</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzr1gmydg">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzr1gmydg">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzr1gmydg">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzr1gmydg">✕</button></div></div><div class="fila"><a href="https://drive.google.com/file/d/1KxMvm08sysJnvcGShVyBWIvzpcZaxl33/view" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/file/d/1KxMvm08sysJnvcGShVyBWIvzpcZaxl33/view">Libro de los ejercicios</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzrqdy39c">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzrqdy39c">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzrqdy39c">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzrqdy39c">✕</button></div></div><div class="fila"><a href="https://meet.google.com/jva-yerq-aro" target="_blank" rel="noopener noreferrer" title="https://meet.google.com/jva-yerq-aro">Link de la reunión</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzrj5bybj">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzrj5bybj">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzrj5bybj">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzrj5bybj">✕</button></div></div><div class="fila"><a href="https://github.com/jgoezl" target="_blank" rel="noopener noreferrer" title="https://github.com/jgoezl">Mi repositorio de GitHub</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzr8s65vz">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzr8s65vz">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzr8s65vz">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrqzod7t" data-enlace="msscimzr8s65vz">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscimzrqzod7t">+ Agregar enlace</button></div></div></div></section><section class="materia" data-materia="msscimzrrvm2jz"><div class="cabecera" data-accion="alternar" data-materia="msscimzrrvm2jz"><span class="flecha"></span><span class="titulo">Enlaces y recursos adicionales</span><span class="contador">6</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="msscimzrrvm2jz">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="msscimzrrvm2jz">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="msscimzrrvm2jz">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="msscimzrrvm2jz">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="msscimzrrvm2jz">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://drive.google.com/drive/folders/1gvVks2jrVFB3TyjTmNPJSlNp5zA3mOnJ?usp=sharing" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/folders/1gvVks2jrVFB3TyjTmNPJSlNp5zA3mOnJ?usp=sharing">Libros</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrmxxzvd">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrmxxzvd">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrmxxzvd">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrmxxzvd">✕</button></div></div><div class="fila"><a href="https://sites.google.com/view/blog-areacurricularmates/programas/ciencias-de-la-computaci%C3%B3n/malla-curricular?authuser=0" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/view/blog-areacurricularmates/programas/ciencias-de-la-computaci%C3%B3n/malla-curricular?authuser=0">Carrera (malla curricular)</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr4yi83w">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr4yi83w">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr4yi83w">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr4yi83w">✕</button></div></div><div class="fila"><a href="https://sites.google.com/view/juandiegovelez/home?authuser=0" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/view/juandiegovelez/home?authuser=0">Juan Diego Vélez — Sites</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrp90kkr">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrp90kkr">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrp90kkr">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrp90kkr">✕</button></div></div><div class="fila"><a href="http://cses.fi/book/book.pdf" target="_blank" rel="noopener noreferrer" title="http://cses.fi/book/book.pdf">Libro de programación competitiva</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrnjm2x5">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrnjm2x5">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrnjm2x5">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzrnjm2x5">✕</button></div></div><div class="fila"><a href="https://dn720001.ca.archive.org/0/items/4-programming-interviews-exposed-4th-edition/Cracking-the-Coding-Interview-6th-Edition-189-Programming-Questions-and-Solutions.pdf" target="_blank" rel="noopener noreferrer" title="https://dn720001.ca.archive.org/0/items/4-programming-interviews-exposed-4th-edition/Cracking-the-Coding-Interview-6th-Edition-189-Programming-Questions-and-Solutions.pdf">Cracking the Coding Interview</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr6fmt6t">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr6fmt6t">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr6fmt6t">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr6fmt6t">✕</button></div></div><div class="fila"><a href="https://drive.google.com/drive/u/1/folders/10E8um9vj6vdbEN8hfAZrEMI-Asbs83K8" target="_blank" rel="noopener noreferrer" title="https://drive.google.com/drive/u/1/folders/10E8um9vj6vdbEN8hfAZrEMI-Asbs83K8">Drive matemáticas</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr7uys66">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr7uys66">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr7uys66">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="msscimzrrvm2jz" data-enlace="msscimzr7uys66">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="msscimzrrvm2jz">+ Agregar enlace</button></div></div></div></section><section class="materia" data-materia="mtoki5u26sge6y"><div class="cabecera" data-accion="alternar" data-materia="mtoki5u26sge6y"><span class="flecha"></span><span class="titulo">Programación lineal</span><span class="contador">1</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="mtoki5u26sge6y">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="mtoki5u26sge6y">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="mtoki5u26sge6y">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="mtoki5u26sge6y">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="mtoki5u26sge6y">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://sites.google.com/a/unal.edu.co/camilo-arias-abad/linear-programming?authuser=0" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/a/unal.edu.co/camilo-arias-abad/linear-programming?authuser=0">Pagina Camilo Arias - 2025 1</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="mtoki5u26sge6y" data-enlace="mtokik0k81k5sg">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="mtoki5u26sge6y" data-enlace="mtokik0k81k5sg">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="mtoki5u26sge6y" data-enlace="mtokik0k81k5sg">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="mtoki5u26sge6y" data-enlace="mtokik0k81k5sg">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="mtoki5u26sge6y">+ Agregar enlace</button></div></div></div></section><section class="materia abierta" data-materia="mtokjqxt2xfldg"><div class="cabecera" data-accion="alternar" data-materia="mtokjqxt2xfldg"><span class="flecha"></span><span class="titulo">Introducción a la computación cuántica</span><span class="contador">1</span><div class="acciones"><button class="icono" title="Agregar enlace" data-accion="nuevo-enlace" data-materia="mtokjqxt2xfldg">+</button><button class="icono" title="Subir materia" data-accion="subir-materia" data-materia="mtokjqxt2xfldg">↑</button><button class="icono" title="Bajar materia" data-accion="bajar-materia" data-materia="mtokjqxt2xfldg">↓</button><button class="icono" title="Renombrar" data-accion="editar-materia" data-materia="mtokjqxt2xfldg">✎</button><button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="mtokjqxt2xfldg">✕</button></div></div><div class="contenido"><div><div class="enlaces"><div class="fila"><a href="https://sites.google.com/a/unal.edu.co/camilo-arias-abad/linear-programming?authuser=0" target="_blank" rel="noopener noreferrer" title="https://sites.google.com/a/unal.edu.co/camilo-arias-abad/linear-programming?authuser=0">Pagina Camilo Arias - 2024 1</a><div class="acciones-enlace"><button class="icono" title="Subir" data-accion="subir-enlace" data-materia="mtokjqxt2xfldg" data-enlace="mtokk6ahidaow0">↑</button><button class="icono" title="Bajar" data-accion="bajar-enlace" data-materia="mtokjqxt2xfldg" data-enlace="mtokk6ahidaow0">↓</button><button class="icono" title="Editar" data-accion="editar-enlace" data-materia="mtokjqxt2xfldg" data-enlace="mtokk6ahidaow0">✎</button><button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="mtokjqxt2xfldg" data-enlace="mtokk6ahidaow0">✕</button></div></div><button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="mtokjqxt2xfldg">+ Agregar enlace</button></div></div></div></section></main>
+
+    <footer>
+        <button class="btn-tenue" id="btn-exportar">Exportar copia (.json)</button>
+        <button class="btn-tenue" id="btn-importar">Importar copia</button>
+        <button class="btn-tenue" id="btn-restaurar">Restaurar contenido original</button>
+        <input type="file" id="archivo-importar" accept="application/json,.json" hidden="">
+    </footer>
+
+</div>
+
+<div class="fondo-modal" id="fondo-modal">
+    <form class="modal" id="modal" autocomplete="off">
+        <h2 id="modal-titulo">Título</h2>
+        <p class="ayuda" id="modal-ayuda"></p>
+        <div id="modal-campos"></div>
+        <div class="error" id="modal-error"></div>
+        <div class="botones-modal">
+            <button type="button" class="btn" id="modal-cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-principal" id="modal-aceptar">Guardar</button>
+        </div>
+    </form>
+</div>
+
+<div class="aviso-guardado" id="aviso"></div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   1. Datos
+   ============================================================ */
+
+const CLAVE = "materiasUnal.v1";
+
+/* Contenido inicial: se usa la primera vez que abres la página
+   y cuando pulsas "Restaurar contenido original". */
+const SEMILLA = [
+    {
+        nombre: "Cálculo en Varias Variables",
+        enlaces: [
+            { nombre: "UN VIRTUAL", url: "https://unvirtual.medellin.unal.edu.co/course/view.php?id=157" },
+            { nombre: "GEA", url: "https://sites.google.com/unal.edu.co/gea-unal-sede-medellin/tutorias-y-talleres-gea" },
+            { nombre: "Libro guía", url: "https://intranetua.uantof.cl/estudiomat/calculo3/stewart.pdf" },
+            { nombre: "Videos de YouTube", url: "https://www.youtube.com/@calculoenvariasvariables-u9915/courses" },
+            { nombre: "Programa calendario", url: "https://unvirtual.medellin.unal.edu.co/pluginfile.php/319047/mod_resource/content/78/%5B2026.01%20-%20CVV%5D%20Programa-calendario.pdf" }
+        ]
+    },
+    {
+        nombre: "Álgebra Lineal",
+        enlaces: [
+            { nombre: "Página del curso (Grupo 1)", url: "https://sites.google.com/unal.edu.co/linealunalmedenfocada/inicio" },
+            { nombre: "Página del curso", url: "https://ciencias.medellin.unal.edu.co/cursos/algebra-lineal/" },
+            { nombre: "Libro guía (Español)", url: "https://drive.google.com/file/d/1t6heuHQH2GM49Yj7ugCJ7qmNhMVVTd9x/view" },
+            { nombre: "Libro guía (Inglés)", url: "https://anandinstitute.org/pdf/lenearal.pdf" },
+            { nombre: "Programa del curso", url: "https://drive.google.com/file/d/1A0vsgWDkxSAd0flLbgKQHadb6x3HvAXA/view" }
+        ]
+    },
+    {
+        nombre: "Fundamentos de Matemáticas Discretas",
+        enlaces: [
+            { nombre: "Página del curso 2025-II (talleres)", url: "https://sites.google.com/a/unal.edu.co/camilo-arias-abad/md-2025-ii" },
+            { nombre: "Discrete Mathematics and its Applications — Rosen", url: "https://faculty.ksu.edu.sa/sites/default/files/%5BBook%5D%20Discrete%20mathematics%20and%20its%20applications%20%282019%29_0.pdf" },
+            { nombre: "Clases Cabarcas", url: "https://www.youtube.com/playlist?list=PLmejcmoRNsMiUoQakdJMTELnDMOS-Cqh5" }
+        ]
+    },
+    {
+        nombre: "Fundamentos de Análisis",
+        enlaces: [
+            { nombre: "Clases Sigifredo", url: "https://www.youtube.com/playlist?list=PLmejcmoRNsMh4EjgW0gOxFe5Q8eUMO-in" }
+        ]
+    },
+    {
+        nombre: "POO",
+        enlaces: [
+            { nombre: "Drive", url: "https://drive.google.com/drive/folders/11tjYtSdUduVrHQI1cAlMgfFE5wav2jd-?usp=drive_link" },
+            { nombre: "Libro de los ejercicios", url: "https://drive.google.com/file/d/1KxMvm08sysJnvcGShVyBWIvzpcZaxl33/view" },
+            { nombre: "Link de la reunión", url: "https://meet.google.com/jva-yerq-aro" },
+            { nombre: "Mi repositorio de GitHub", url: "https://github.com/jgoezl" }
+        ]
+    },
+    {
+        nombre: "Probabilidad",
+        enlaces: []
+    },
+    {
+        nombre: "Ecuaciones Diferenciales",
+        enlaces: [
+            { nombre: "Libro guía", url: "https://8b7a35dc-d2a9-4a61-ae5b-0520aae0300a.filesusr.com/ugd/fa8c40_d6c4c976d24d4d13950db034e4927d44.pdf?index=true" },
+            { nombre: "Videos", url: "https://www.youtube.com/@almaarmijoaverill1429/playlists" },
+            { nombre: "Videos profe Julio Morales", url: "https://www.youtube.com/watch?v=SYAwqnWfIsA&list=PLQtxEdIiM6gI4kj3koyvg2NGdxcI-2O59" },
+            { nombre: "Curso en Sites", url: "https://sites.google.com/unal.edu.co/cursoecuacionesdiferenciales/p%C3%A1gina-principal?authuser=0" },
+            { nombre: "Parciales viejos", url: "https://drive.google.com/drive/folders/1YYBzQC2BJ0vn_xj7Yu3nZo4gUekhOX9_" }
+        ]
+    },
+    {
+        nombre: "Enlaces y recursos adicionales",
+        enlaces: [
+            { nombre: "Libros", url: "https://drive.google.com/drive/folders/1gvVks2jrVFB3TyjTmNPJSlNp5zA3mOnJ?usp=sharing" },
+            { nombre: "Carrera (malla curricular)", url: "https://sites.google.com/view/blog-areacurricularmates/programas/ciencias-de-la-computaci%C3%B3n/malla-curricular?authuser=0" },
+            { nombre: "Juan Diego Vélez — Sites", url: "https://sites.google.com/view/juandiegovelez/home?authuser=0" },
+            { nombre: "Libro de programación competitiva", url: "http://cses.fi/book/book.pdf" },
+            { nombre: "Cracking the Coding Interview", url: "https://dn720001.ca.archive.org/0/items/4-programming-interviews-exposed-4th-edition/Cracking-the-Coding-Interview-6th-Edition-189-Programming-Questions-and-Solutions.pdf" },
+            { nombre: "Drive matemáticas", url: "https://drive.google.com/drive/u/1/folders/10E8um9vj6vdbEN8hfAZrEMI-Asbs83K8" }
+        ]
+    }
+];
+
+let materias = cargar();
+
+function nuevoId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+/* Normaliza cualquier estructura (semilla o archivo importado) al formato interno. */
+function normalizar(lista) {
+    if (!Array.isArray(lista)) return [];
+    return lista.map(function (m) {
+        return {
+            id: m.id || nuevoId(),
+            nombre: String(m.nombre || "Sin nombre"),
+            abierta: Boolean(m.abierta),
+            enlaces: Array.isArray(m.enlaces) ? m.enlaces.map(function (e) {
+                return {
+                    id: e.id || nuevoId(),
+                    nombre: String(e.nombre || e.url || "Enlace"),
+                    url: String(e.url || "#")
+                };
+            }) : []
+        };
+    });
+}
+
+function cargar() {
+    try {
+        const crudo = localStorage.getItem(CLAVE);
+        if (crudo) return normalizar(JSON.parse(crudo));
+    } catch (e) {
+        console.warn("No se pudo leer lo guardado:", e);
+    }
+    return normalizar(SEMILLA);
+}
+
+function guardar() {
+    try {
+        localStorage.setItem(CLAVE, JSON.stringify(materias));
+    } catch (e) {
+        avisar("No se pudo guardar (almacenamiento del navegador lleno o bloqueado)");
+    }
+}
+
+/* ============================================================
+   2. Utilidades
+   ============================================================ */
+
+const $ = function (sel) { return document.querySelector(sel); };
+
+function escapar(txt) {
+    return String(txt)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+/* Acepta "unal.edu.co" y lo vuelve "https://unal.edu.co" */
+function normalizarUrl(url) {
+    const limpia = url.trim();
+    if (!limpia) return "";
+    if (/^(https?:|mailto:|file:|\/|\.)/i.test(limpia)) return limpia;
+    return "https://" + limpia;
+}
+
+function buscarMateria(id) {
+    return materias.find(function (m) { return m.id === id; });
+}
+
+let tiempoAviso;
+function avisar(texto) {
+    const aviso = $("#aviso");
+    aviso.textContent = texto;
+    aviso.classList.add("visible");
+    clearTimeout(tiempoAviso);
+    tiempoAviso = setTimeout(function () { aviso.classList.remove("visible"); }, 2400);
+}
+
+/* ============================================================
+   3. Pintado de la lista
+   ============================================================ */
+
+let filtro = "";
+
+function pintar() {
+    const lista = $("#lista");
+    const q = filtro.trim().toLowerCase();
+
+    const visibles = materias.map(function (m) {
+        if (!q) return { materia: m, enlaces: m.enlaces, forzarAbierta: false };
+        const coincideMateria = m.nombre.toLowerCase().includes(q);
+        const enlaces = m.enlaces.filter(function (e) {
+            return e.nombre.toLowerCase().includes(q) || e.url.toLowerCase().includes(q);
+        });
+        if (!coincideMateria && enlaces.length === 0) return null;
+        return {
+            materia: m,
+            enlaces: coincideMateria ? m.enlaces : enlaces,
+            forzarAbierta: true
+        };
+    }).filter(Boolean);
+
+    if (visibles.length === 0) {
+        lista.innerHTML = '<div class="sin-materias">' +
+            (q ? "Ningún resultado para <strong>" + escapar(filtro) + "</strong>"
+               : 'Todavía no hay materias. Pulsa <strong>+ Nueva materia</strong> para empezar.') +
+            "</div>";
+        return;
+    }
+
+    lista.innerHTML = visibles.map(function (v) {
+        const m = v.materia;
+        const abierta = v.forzarAbierta || m.abierta;
+
+        const filas = v.enlaces.length
+            ? v.enlaces.map(function (e) {
+                return '' +
+                '<div class="fila">' +
+                    '<a href="' + escapar(e.url) + '" target="_blank" rel="noopener noreferrer" title="' + escapar(e.url) + '">' +
+                        escapar(e.nombre) +
+                    '</a>' +
+                    '<div class="acciones-enlace">' +
+                        '<button class="icono" title="Subir"    data-accion="subir-enlace"   data-materia="' + m.id + '" data-enlace="' + e.id + '">&#8593;</button>' +
+                        '<button class="icono" title="Bajar"    data-accion="bajar-enlace"   data-materia="' + m.id + '" data-enlace="' + e.id + '">&#8595;</button>' +
+                        '<button class="icono" title="Editar"   data-accion="editar-enlace"  data-materia="' + m.id + '" data-enlace="' + e.id + '">&#9998;</button>' +
+                        '<button class="icono peligro" title="Eliminar" data-accion="borrar-enlace" data-materia="' + m.id + '" data-enlace="' + e.id + '">&#10005;</button>' +
+                    '</div>' +
+                '</div>';
+            }).join("")
+            : '<div class="vacio">Sin enlaces todavía.</div>';
+
+        return '' +
+        '<section class="materia' + (abierta ? " abierta" : "") + '" data-materia="' + m.id + '">' +
+            '<div class="cabecera" data-accion="alternar" data-materia="' + m.id + '">' +
+                '<span class="flecha"></span>' +
+                '<span class="titulo">' + escapar(m.nombre) + '</span>' +
+                '<span class="contador">' + m.enlaces.length + '</span>' +
+                '<div class="acciones">' +
+                    '<button class="icono" title="Agregar enlace"  data-accion="nuevo-enlace"    data-materia="' + m.id + '">+</button>' +
+                    '<button class="icono" title="Subir materia"   data-accion="subir-materia"   data-materia="' + m.id + '">&#8593;</button>' +
+                    '<button class="icono" title="Bajar materia"   data-accion="bajar-materia"   data-materia="' + m.id + '">&#8595;</button>' +
+                    '<button class="icono" title="Renombrar"       data-accion="editar-materia"  data-materia="' + m.id + '">&#9998;</button>' +
+                    '<button class="icono peligro" title="Eliminar materia" data-accion="borrar-materia" data-materia="' + m.id + '">&#10005;</button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="contenido"><div><div class="enlaces">' +
+                filas +
+                '<button class="agregar-enlace" data-accion="nuevo-enlace" data-materia="' + m.id + '">+ Agregar enlace</button>' +
+            '</div></div></div>' +
+        '</section>';
+    }).join("");
+}
+
+/* ============================================================
+   4. Ventana modal (formularios y confirmaciones)
+   ============================================================ */
+
+let alEnviarModal = null;
+
+function abrirModal(opciones) {
+    $("#modal-titulo").textContent = opciones.titulo;
+    $("#modal-ayuda").textContent = opciones.ayuda || "";
+    $("#modal-ayuda").style.display = opciones.ayuda ? "" : "none";
+    $("#modal-error").textContent = "";
+    $("#modal-aceptar").textContent = opciones.textoAceptar || "Guardar";
+    $("#modal-aceptar").classList.toggle("btn-principal", true);
+
+    const campos = opciones.campos || [];
+    $("#modal-campos").innerHTML = campos.map(function (c, i) {
+        return '<div class="campo">' +
+            '<label for="campo-' + i + '">' + escapar(c.etiqueta) + '</label>' +
+            '<input id="campo-' + i + '" name="' + c.nombre + '" value="' + escapar(c.valor || "") + '" placeholder="' + escapar(c.placeholder || "") + '">' +
+        '</div>';
+    }).join("");
+
+    alEnviarModal = opciones.alAceptar;
+    $("#fondo-modal").classList.add("visible");
+
+    const primero = $("#modal-campos input");
+    if (primero) { primero.focus(); primero.select(); }
+    else $("#modal-aceptar").focus();
+}
+
+function cerrarModal() {
+    $("#fondo-modal").classList.remove("visible");
+    alEnviarModal = null;
+}
+
+$("#modal").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    if (!alEnviarModal) return cerrarModal();
+
+    const valores = {};
+    Array.prototype.forEach.call(this.querySelectorAll("#modal-campos input"), function (input) {
+        valores[input.name] = input.value.trim();
+    });
+
+    const error = alEnviarModal(valores);
+    if (error) { $("#modal-error").textContent = error; return; }
+    cerrarModal();
+});
+
+$("#modal-cancelar").addEventListener("click", cerrarModal);
+
+$("#fondo-modal").addEventListener("mousedown", function (ev) {
+    if (ev.target === this) cerrarModal();
+});
+
+document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && $("#fondo-modal").classList.contains("visible")) cerrarModal();
+    if (ev.key === "/" && document.activeElement.tagName !== "INPUT") {
+        ev.preventDefault();
+        $("#buscar").focus();
+    }
+});
+
+function confirmar(titulo, ayuda, alAceptar) {
+    abrirModal({
+        titulo: titulo,
+        ayuda: ayuda,
+        campos: [],
+        textoAceptar: "Sí, eliminar",
+        alAceptar: function () { alAceptar(); }
+    });
+}
+
+/* ============================================================
+   5. Acciones
+   ============================================================ */
+
+function aplicar(mensaje) {
+    guardar();
+    pintar();
+    if (mensaje) avisar(mensaje);
+}
+
+function mover(lista, indice, salto) {
+    const destino = indice + salto;
+    if (destino < 0 || destino >= lista.length) return false;
+    const item = lista.splice(indice, 1)[0];
+    lista.splice(destino, 0, item);
+    return true;
+}
+
+const acciones = {
+
+    "alternar": function (m) {
+        m.abierta = !m.abierta;
+        aplicar();
+    },
+
+    "nueva-materia": function () {
+        abrirModal({
+            titulo: "Nueva materia",
+            campos: [{ nombre: "nombre", etiqueta: "Nombre de la materia", placeholder: "Ej. Teoría de Números" }],
+            alAceptar: function (v) {
+                if (!v.nombre) return "Escribe un nombre.";
+                materias.push({ id: nuevoId(), nombre: v.nombre, abierta: true, enlaces: [] });
+                aplicar("Materia agregada");
+            }
+        });
+    },
+
+    "editar-materia": function (m) {
+        abrirModal({
+            titulo: "Renombrar materia",
+            campos: [{ nombre: "nombre", etiqueta: "Nombre de la materia", valor: m.nombre }],
+            alAceptar: function (v) {
+                if (!v.nombre) return "Escribe un nombre.";
+                m.nombre = v.nombre;
+                aplicar("Materia renombrada");
+            }
+        });
+    },
+
+    "borrar-materia": function (m) {
+        confirmar(
+            "¿Eliminar «" + m.nombre + "»?",
+            "Se borrarán también sus " + m.enlaces.length + " enlace(s). Esta acción no se puede deshacer.",
+            function () {
+                materias = materias.filter(function (x) { return x.id !== m.id; });
+                aplicar("Materia eliminada");
+            }
+        );
+    },
+
+    "subir-materia": function (m) {
+        if (mover(materias, materias.indexOf(m), -1)) aplicar();
+    },
+
+    "bajar-materia": function (m) {
+        if (mover(materias, materias.indexOf(m), 1)) aplicar();
+    },
+
+    "nuevo-enlace": function (m) {
+        abrirModal({
+            titulo: "Nuevo enlace",
+            ayuda: "En " + m.nombre,
+            campos: [
+                { nombre: "nombre", etiqueta: "Nombre visible", placeholder: "Ej. Libro guía" },
+                { nombre: "url", etiqueta: "Dirección (URL)", placeholder: "https://..." }
+            ],
+            alAceptar: function (v) {
+                if (!v.url) return "Escribe la dirección del enlace.";
+                m.enlaces.push({ id: nuevoId(), nombre: v.nombre || v.url, url: normalizarUrl(v.url) });
+                m.abierta = true;
+                aplicar("Enlace agregado");
+            }
+        });
+    },
+
+    "editar-enlace": function (m, e) {
+        abrirModal({
+            titulo: "Editar enlace",
+            ayuda: "En " + m.nombre,
+            campos: [
+                { nombre: "nombre", etiqueta: "Nombre visible", valor: e.nombre },
+                { nombre: "url", etiqueta: "Dirección (URL)", valor: e.url }
+            ],
+            alAceptar: function (v) {
+                if (!v.url) return "Escribe la dirección del enlace.";
+                e.nombre = v.nombre || v.url;
+                e.url = normalizarUrl(v.url);
+                aplicar("Enlace actualizado");
+            }
+        });
+    },
+
+    "borrar-enlace": function (m, e) {
+        confirmar("¿Eliminar el enlace «" + e.nombre + "»?", "", function () {
+            m.enlaces = m.enlaces.filter(function (x) { return x.id !== e.id; });
+            aplicar("Enlace eliminado");
+        });
+    },
+
+    "subir-enlace": function (m, e) {
+        if (mover(m.enlaces, m.enlaces.indexOf(e), -1)) aplicar();
+    },
+
+    "bajar-enlace": function (m, e) {
+        if (mover(m.enlaces, m.enlaces.indexOf(e), 1)) aplicar();
+    }
+};
+
+/* Un solo escuchador para toda la lista */
+$("#lista").addEventListener("click", function (ev) {
+    const disparador = ev.target.closest("[data-accion]");
+    if (!disparador) return;
+
+    const accion = disparador.dataset.accion;
+    if (!acciones[accion]) return;
+
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    const materia = buscarMateria(disparador.dataset.materia);
+    if (!materia) return;
+
+    const enlace = disparador.dataset.enlace
+        ? materia.enlaces.find(function (x) { return x.id === disparador.dataset.enlace; })
+        : null;
+
+    acciones[accion](materia, enlace);
+});
+
+$("#btn-nueva-materia").addEventListener("click", function () { acciones["nueva-materia"](); });
+
+$("#buscar").addEventListener("input", function () {
+    filtro = this.value;
+    pintar();
+});
+
+/* ============================================================
+   6. Copias de seguridad
+   ============================================================ */
+
+$("#btn-exportar").addEventListener("click", function () {
+    const blob = new Blob([JSON.stringify(materias, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const hoy = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = "materias-" + hoy + ".json";
+    a.click();
+    URL.revokeObjectURL(url);
+    avisar("Copia descargada");
+});
+
+$("#btn-importar").addEventListener("click", function () { $("#archivo-importar").click(); });
+
+$("#archivo-importar").addEventListener("change", function (ev) {
+    const archivo = ev.target.files[0];
+    if (!archivo) return;
+    const lector = new FileReader();
+    lector.onload = function () {
+        try {
+            const datos = normalizar(JSON.parse(lector.result));
+            if (!datos.length) throw new Error("vacío");
+            materias = datos;
+            aplicar("Copia importada");
+        } catch (e) {
+            avisar("El archivo no es una copia válida");
+        }
+    };
+    lector.readAsText(archivo);
+    ev.target.value = "";
+});
+
+$("#btn-restaurar").addEventListener("click", function () {
+    confirmar(
+        "¿Restaurar el contenido original?",
+        "Se perderán las materias y enlaces que hayas agregado o editado. Puedes exportar una copia antes.",
+        function () {
+            materias = normalizar(SEMILLA);
+            aplicar("Contenido original restaurado");
+        }
+    );
+});
+
+/* ============================================================
+   7. Arranque
+   ============================================================ */
+
+pintar();
+guardar();
+</script>
+
+
+
+</body></html>
